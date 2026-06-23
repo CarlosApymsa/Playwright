@@ -15,8 +15,7 @@ test('registry', async ({ page }) => {
   await page.locator("id=friday").click();
   await page.locator("id=picture").setInputFiles('pictures/RH.JPG');
   await page.getByRole('button', { name: 'Guardar' }).click();
+
+  await page.pause();
     
-   await page.pause()
- 
-  
 });

@@ -9,6 +9,4 @@ test('login', async({page})=>{
 
     await page.locator ('//button[@type=\'submit\']') . click()
 
-
-    await page.pause()
 })
