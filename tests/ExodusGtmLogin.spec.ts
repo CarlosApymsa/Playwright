@@ -1,14 +1,15 @@
-import {test, expect} from '@playwright/test' 
-import { array } from 'node:stream/iter';
+import {test, expect} from '@playwright/test';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-const User = process.env.USER;
-const Pass = process.env.PASS;
+
+const User = process.env.USER || '';
+const Pass = process.env.PASS || '';
 const URL = 'https://gtm-pwa.apymsa-testsvr.apymsa.com.mx/login'
 
 
-test('Ubicacion incorrecta', async({context, page}, testinfo)=>{
+test('Ubicacion incorrecta', async({context, page}, testInfo) => {
     
     await context.grantPermissions(['geolocation']);
 
@@ -35,7 +36,7 @@ test('Ubicacion incorrecta', async({context, page}, testinfo)=>{
     await expect (sinUbicacion).toContainText ('No se encontró ninguna sucursal en tu localización');
 
     //Captura de evicencia
-    await testinfo.attach('Ubicacion incorrecta',{
+    await testInfo.attach('Ubicacion incorrecta',{
         body: await page.screenshot (),
         contentType: 'image/png' 
 
@@ -45,7 +46,7 @@ test('Ubicacion incorrecta', async({context, page}, testinfo)=>{
 
 });
 
-test('Botón inicio sesión deshabilitado falta usuario', async({page}, testinfo)=>{
+test('Botón inicio sesión deshabilitado falta usuario', async({page}, testInfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -61,6 +62,7 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page}, testinfo
     const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(189, 189, 189);';
     const locator = page.locator(`//div[@style="${estilo}"]`).first();
     await expect(locator).toHaveAttribute('style', estilo);
+    
 
     //Inserta valor de password
     await page.locator ('//input[@type=\'password\']').fill(Pass);
@@ -69,7 +71,7 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page}, testinfo
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
 
     //Captura de evicencia
-    await testinfo.attach('Botón inicio sesión deshabilitado falta usuario',{
+    await testInfo.attach('Botón inicio sesión deshabilitado falta usuario',{
         body: await page.screenshot (),
         contentType: 'image/png' 
 
@@ -79,7 +81,7 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page}, testinfo
 
 });
 
-test('Botón inicio sesión deshabilitado falta pass', async({page}, testinfo)=>{
+test('Botón inicio sesión deshabilitado falta pass', async({page}, testInfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -103,7 +105,7 @@ test('Botón inicio sesión deshabilitado falta pass', async({page}, testinfo)=>
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
 
     //Captura de evicencia
-    await testinfo.attach('Botón inicio sesión deshabilitado falta pass',{
+    await testInfo.attach('Botón inicio sesión deshabilitado falta pass',{
         body: await page.screenshot (),
         contentType: 'image/png' 
     });
@@ -112,7 +114,7 @@ test('Botón inicio sesión deshabilitado falta pass', async({page}, testinfo)=>
 
 });
 
-test('Usuario incorrecto', async({page}, testinfo)=>{
+test('Usuario incorrecto', async({page}, testInfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -144,7 +146,7 @@ test('Usuario incorrecto', async({page}, testinfo)=>{
     await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
 
     //Captura de evicencia
-    await testinfo.attach('Usuario incorrecto',{
+    await testInfo.attach('Usuario incorrecto',{
         body: await page.screenshot (),
         contentType: 'image/png'
     });
@@ -154,7 +156,7 @@ test('Usuario incorrecto', async({page}, testinfo)=>{
 });
 
 
-test('Pass incorrecto', async({page}, testinfo)=>{
+test('Pass incorrecto', async({page}, testInfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -191,7 +193,7 @@ test('Pass incorrecto', async({page}, testinfo)=>{
     await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
 
     //Captura de evicencia
-    await testinfo.attach('Pass incorrecto',{
+    await testInfo.attach('Pass incorrecto',{
         body: await page.screenshot (),
         contentType: 'image/png' 
     });
@@ -200,7 +202,7 @@ test('Pass incorrecto', async({page}, testinfo)=>{
 
 });
 
-test('Inicio de sesion correcto', async({page}, testinfo)=>{
+test('Inicio de sesion correcto', async({page}, testInfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -225,12 +227,18 @@ test('Inicio de sesion correcto', async({page}, testinfo)=>{
     .toHaveAttribute('tabindex', '0');
 
     //Valida que el boton este habilitado
-    const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
+   /* const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
     const locator = page.locator(`//div[@style="${estilo}"]`).first();
-    await expect(locator).toHaveAttribute('style', estilo);
+    await expect(locator).toHaveAttribute('style', estilo);*/
+
+    
+    
+    const boton = page.locator('div').filter({ hasText: 'Iniciar sesión' }).first();
+    await expect(boton).toHaveCSS('background-color', 'rgb(27, 56, 146)');
+
 
     //Captura de evicencia antes de iniciar sesión
-    await testinfo.attach('Inicio de sesion correcto 1',{
+    await testInfo.attach('Inicio de sesion correcto 1',{
         body: await page.screenshot (),
         contentType: 'image/png' 
     });
@@ -242,7 +250,7 @@ test('Inicio de sesion correcto', async({page}, testinfo)=>{
     await expect(page).toHaveTitle('Inicio');
 
     //Captura de evicencia
-    await testinfo.attach('Inicio de sesion correcto 2',{
+    await testInfo.attach('Inicio de sesion correcto 2',{
         body: await page.screenshot (),
         contentType: 'image/png' 
     });
