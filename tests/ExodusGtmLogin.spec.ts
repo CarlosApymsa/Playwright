@@ -1,8 +1,11 @@
 import {test, expect} from '@playwright/test' 
 import { array } from 'node:stream/iter';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const User = process.env.USER;
+const Pass = process.env.PASS;
 const URL = 'https://gtm-pwa.apymsa-testsvr.apymsa.com.mx/login'
-const User = '1931'
-const Pass = '0000'
 
 
 test('Ubicacion incorrecta', async({context, page})=>{
@@ -18,7 +21,7 @@ test('Ubicacion incorrecta', async({context, page})=>{
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
-    //No inserta valor de usuario
+    //Inserta valor de usuario
     await page.getByTestId('TextInputEnabled').nth(1).fill(User);
 
     //Inserta valor de password
@@ -27,11 +30,11 @@ test('Ubicacion incorrecta', async({context, page})=>{
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
 
-    //Prueba de localizacion invalida
+    //Valida localizacion invalida
     const sinUbicacion = await page.getByText('No se encontró ninguna sucursal en tu localización');
     await expect (sinUbicacion).toContainText ('No se encontró ninguna sucursal en tu localización');
 
-    await page.pause()
+    //await page.pause()
 
 });
 
@@ -43,7 +46,7 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page})=>{
     //No inserta valor de usuario
     await page.getByTestId('TextInputEnabled').nth(1).fill('');
 
-    // Validar que el usuario este vacío
+    //Valida que el usuario este vacío
     await expect(page.locator('//div[@tabindex="-1"]').nth(2))
     .toHaveAttribute('tabindex', '-1');
 
@@ -67,13 +70,13 @@ test('Botón inicio sesión deshabilitado falta pass', async({page})=>{
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
-    //No inserta valor de usuario
+    //Inserta valor de usuario
     await page.getByTestId('TextInputEnabled').nth(1).fill(User);
 
-    //Inserta valor de password
+    //No inserta valor de password
     await page.locator ('//input[@type=\'password\']').fill('');
 
-        // Validar que el usuario este vacío
+    //Valida que el pass este vacío
     await expect(page.locator('//div[@tabindex="-1"]').nth(3))
     .toHaveAttribute('tabindex', '-1');
 
@@ -94,7 +97,7 @@ test('Usuario incorrecto', async({page})=>{
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
-    //Inserta valor de usuario
+    //Inserta valor incorrecto al usuario
     await page.getByTestId('TextInputEnabled').nth(1).fill('1');
 
     //Valida que el usuario tenga valor
@@ -116,7 +119,7 @@ test('Usuario incorrecto', async({page})=>{
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
     
-    //Alerta de usuario invalido
+    //Valida alerta de usuario invalido
     const alerta = page.locator('div').filter({ hasText: 'ErrorEl usuario o la contrase' }).nth(3);
     await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
 
@@ -137,7 +140,7 @@ test('Pass incorrecto', async({page})=>{
     await expect(page.locator('//div[@tabindex="0"]').nth(2))
     .toHaveAttribute('tabindex', '0');
 
-    //Inserta valor de password
+    //Inserta valor incorecto al password
     await page.locator ('//input[@type=\'password\']').fill('9999');
 
     //Clic en visualizar pass
@@ -145,11 +148,11 @@ test('Pass incorrecto', async({page})=>{
 
     await page.waitForTimeout(1000);
 
-    // Valida que el pass tenga valor
+    //Valida que el pass tenga valor
     await expect(page.locator('//div[@tabindex="0"]').nth(3))
     .toHaveAttribute('tabindex', '0');
 
-    //valida que el boton este habilitado
+    //Valida que el boton este habilitado
     const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
     const locator = page.locator(`//div[@style="${estilo}"]`).first();
     await expect(locator).toHaveAttribute('style', estilo);
@@ -157,7 +160,7 @@ test('Pass incorrecto', async({page})=>{
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
     
-    //Alerta de pass invalido
+    //Valida alerta de pass invalido
     const alerta = page.locator('div').filter({ hasText: 'ErrorEl usuario o la contrase' }).nth(3);
     await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
 
@@ -185,11 +188,11 @@ test('Inicio de sesion correcto', async({page})=>{
 
     await page.waitForTimeout(1000);
 
-    // Valida que el pass tenga valor
+    //Valida que el pass tenga valor
     await expect(page.locator('//div[@tabindex="0"]').nth(3))
     .toHaveAttribute('tabindex', '0');
 
-    //valida que el boton este habilitado
+    //Valida que el boton este habilitado
     const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
     const locator = page.locator(`//div[@style="${estilo}"]`).first();
     await expect(locator).toHaveAttribute('style', estilo);
@@ -200,6 +203,6 @@ test('Inicio de sesion correcto', async({page})=>{
     //Valida que se recupere la pagina de inicio de sesion
     await expect(page).toHaveTitle('Inicio');
 
-    await page.pause();
+    //await page.pause();
 
 });
