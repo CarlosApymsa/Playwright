@@ -8,7 +8,7 @@ const Pass = process.env.PASS;
 const URL = 'https://gtm-pwa.apymsa-testsvr.apymsa.com.mx/login'
 
 
-test('Ubicacion incorrecta', async({context, page})=>{
+test('Ubicacion incorrecta', async({context, page}, testinfo)=>{
     
     await context.grantPermissions(['geolocation']);
 
@@ -34,11 +34,18 @@ test('Ubicacion incorrecta', async({context, page})=>{
     const sinUbicacion = await page.getByText('No se encontró ninguna sucursal en tu localización');
     await expect (sinUbicacion).toContainText ('No se encontró ninguna sucursal en tu localización');
 
+    //Captura de evicencia
+    await testinfo.attach('Ubicacion incorrecta',{
+        body: await page.screenshot (),
+        contentType: 'image/png' 
+
+    });
+
     //await page.pause()
 
 });
 
-test('Botón inicio sesión deshabilitado falta usuario', async({page})=>{
+test('Botón inicio sesión deshabilitado falta usuario', async({page}, testinfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -61,11 +68,18 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page})=>{
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
 
+    //Captura de evicencia
+    await testinfo.attach('Botón inicio sesión deshabilitado falta usuario',{
+        body: await page.screenshot (),
+        contentType: 'image/png' 
+
+    });
+
     //await page.pause()
 
 });
 
-test('Botón inicio sesión deshabilitado falta pass', async({page})=>{
+test('Botón inicio sesión deshabilitado falta pass', async({page}, testinfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -88,11 +102,17 @@ test('Botón inicio sesión deshabilitado falta pass', async({page})=>{
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
 
+    //Captura de evicencia
+    await testinfo.attach('Botón inicio sesión deshabilitado falta pass',{
+        body: await page.screenshot (),
+        contentType: 'image/png' 
+    });
+
     //await page.pause()
 
 });
 
-test('Usuario incorrecto', async({page})=>{
+test('Usuario incorrecto', async({page}, testinfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -123,12 +143,18 @@ test('Usuario incorrecto', async({page})=>{
     const alerta = page.locator('div').filter({ hasText: 'ErrorEl usuario o la contrase' }).nth(3);
     await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
 
+    //Captura de evicencia
+    await testinfo.attach('Usuario incorrecto',{
+        body: await page.screenshot (),
+        contentType: 'image/png'
+    });
+
     //await page.pause()
 
 });
 
 
-test('Pass incorrecto', async({page})=>{
+test('Pass incorrecto', async({page}, testinfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -164,11 +190,17 @@ test('Pass incorrecto', async({page})=>{
     const alerta = page.locator('div').filter({ hasText: 'ErrorEl usuario o la contrase' }).nth(3);
     await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
 
+    //Captura de evicencia
+    await testinfo.attach('Pass incorrecto',{
+        body: await page.screenshot (),
+        contentType: 'image/png' 
+    });
+
     //await page.pause();
 
 });
 
-test('Inicio de sesion correcto', async({page})=>{
+test('Inicio de sesion correcto', async({page}, testinfo)=>{
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
@@ -197,11 +229,23 @@ test('Inicio de sesion correcto', async({page})=>{
     const locator = page.locator(`//div[@style="${estilo}"]`).first();
     await expect(locator).toHaveAttribute('style', estilo);
 
+    //Captura de evicencia antes de iniciar sesión
+    await testinfo.attach('Inicio de sesion correcto 1',{
+        body: await page.screenshot (),
+        contentType: 'image/png' 
+    });
+
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
 
     //Valida que se recupere la pagina de inicio de sesion
     await expect(page).toHaveTitle('Inicio');
+
+    //Captura de evicencia
+    await testinfo.attach('Inicio de sesion correcto 2',{
+        body: await page.screenshot (),
+        contentType: 'image/png' 
+    });
 
     //await page.pause();
 
