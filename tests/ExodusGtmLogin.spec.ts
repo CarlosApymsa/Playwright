@@ -227,15 +227,9 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
     .toHaveAttribute('tabindex', '0');
 
     //Valida que el boton este habilitado
-   /* const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
+    const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
     const locator = page.locator(`//div[@style="${estilo}"]`).first();
-    await expect(locator).toHaveAttribute('style', estilo);*/
-
-    
-    
-    const boton = page.locator('div').filter({ hasText: 'Iniciar sesión' }).first();
-    await expect(boton).toHaveCSS('background-color', 'rgb(27, 56, 146)');
-
+    await expect(locator).toHaveAttribute('style', estilo);
 
     //Captura de evicencia antes de iniciar sesión
     await testInfo.attach('Inicio de sesion correcto 1',{
