@@ -42,7 +42,7 @@ test('Ubicacion incorrecta', async({context, page}, testInfo) => {
 
     });
 
-    await page.pause()
+    //await page.pause()
 
 });
 
@@ -198,7 +198,7 @@ test('Pass incorrecto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    await page.pause();
+    //await page.pause();
 
 });
 
@@ -249,6 +249,6 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    await page.pause();
+    //await page.pause();
 
 });
