@@ -42,7 +42,7 @@ test('Ubicacion incorrecta', async({context, page}, testInfo) => {
 
     });
 
-    //await page.pause()
+    await page.pause()
 
 });
 
@@ -198,7 +198,7 @@ test('Pass incorrecto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    //await page.pause();
+    await page.pause();
 
 });
 
@@ -218,7 +218,7 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
     await page.locator ('//input[@type=\'password\']').fill(Pass);
 
     //Clic en visualizar pass
-    await page.locator('div:nth-child(5) > div > div > .css-175oi2r.r-1loqt21 > svg > path').click();
+    await page.getByTestId('EyeIcon').click();
 
     await page.waitForTimeout(1000);
 
@@ -249,6 +249,6 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    //await page.pause();
+    await page.pause();
 
 });
