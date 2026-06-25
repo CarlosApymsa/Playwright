@@ -42,7 +42,7 @@ test('Ubicacion incorrecta', async({context, page}, testInfo) => {
 
     });
 
-    await page.pause()
+     //await page.pause()
 
 });
 
@@ -59,10 +59,8 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page}, testInfo
     .toHaveAttribute('tabindex', '-1');
 
     //valida que el boton este deshabilitado
-    const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(189, 189, 189);';
-    const locator = page.locator(`//div[@style="${estilo}"]`).first();
-    await expect(locator).toHaveAttribute('style', estilo);
-    
+    const locator = page.locator(`//div[contains(@style, "background-color: rgb(189, 189, 189)")]`).first();
+    await expect(locator).toHaveCSS('background-color','rgb(189, 189, 189)');
 
     //Inserta valor de password
     await page.locator ('//input[@type=\'password\']').fill(Pass);
@@ -97,9 +95,9 @@ test('Botón inicio sesión deshabilitado falta pass', async({page}, testInfo)=>
     .toHaveAttribute('tabindex', '-1');
 
     //valida que el boton este deshabilitado
-    const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(189, 189, 189);';
-    const locator = page.locator(`//div[@style="${estilo}"]`).first();
-    await expect(locator).toHaveAttribute('style', estilo);
+    const locator = page.locator(`//div[contains(@style, "background-color: rgb(189, 189, 189)")]`).first();
+    await expect(locator).toHaveCSS('background-color','rgb(189, 189, 189)');
+
 
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
@@ -134,9 +132,8 @@ test('Usuario incorrecto', async({page}, testInfo)=>{
     .toHaveAttribute('tabindex', '0');
 
     //valida que el boton este habilitado
-    const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
-    const locator = page.locator(`//div[@style="${estilo}"]`).first();
-    await expect(locator).toHaveAttribute('style', estilo);
+    const locator = page.locator(`//div[contains(@style, "background-color: rgb(27, 56, 146)")]`).first();
+    await expect(locator).toHaveCSS('background-color','rgb(27, 56, 146)');
 
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
@@ -172,7 +169,7 @@ test('Pass incorrecto', async({page}, testInfo)=>{
     await page.locator ('//input[@type=\'password\']').fill('9999');
 
     //Clic en visualizar pass
-    await page.locator('div:nth-child(5) > div > div > .css-175oi2r.r-1loqt21 > svg > path').click();
+    await page.getByTestId('EyeIcon').click();
 
     await page.waitForTimeout(1000);
 
@@ -181,9 +178,8 @@ test('Pass incorrecto', async({page}, testInfo)=>{
     .toHaveAttribute('tabindex', '0');
 
     //Valida que el boton este habilitado
-    const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
-    const locator = page.locator(`//div[@style="${estilo}"]`).first();
-    await expect(locator).toHaveAttribute('style', estilo);
+    const locator = page.locator(`//div[contains(@style, "background-color: rgb(27, 56, 146)")]`).first();
+    await expect(locator).toHaveCSS('background-color','rgb(27, 56, 146)');
 
     //Clic en el boton iniciar sesión
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
@@ -198,7 +194,7 @@ test('Pass incorrecto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    await page.pause();
+    // await page.pause();
 
 });
 
@@ -227,9 +223,8 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
     .toHaveAttribute('tabindex', '0');
 
     //Valida que el boton este habilitado
-    const estilo = 'align-items: center; justify-content: center; flex-shrink: 1; border-radius: 9.16667px; height: 54px; width: 660px; background-color: rgb(27, 56, 146);';
-    const locator = page.locator(`//div[@style="${estilo}"]`).first();
-    await expect(locator).toHaveAttribute('style', estilo);
+    const locator = page.locator(`//div[contains(@style, "background-color: rgb(27, 56, 146)")]`).first();
+    await expect(locator).toHaveCSS('background-color','rgb(27, 56, 146)');
 
     //Captura de evicencia antes de iniciar sesión
     await testInfo.attach('Inicio de sesion correcto 1',{
@@ -249,6 +244,6 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    await page.pause();
+    // await page.pause();
 
 });
