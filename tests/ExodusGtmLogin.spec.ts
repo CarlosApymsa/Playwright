@@ -121,15 +121,13 @@ test('Usuario incorrecto', async({page}, testInfo)=>{
     await page.getByTestId('TextInputEnabled').nth(1).fill('1');
 
     //Valida que el usuario tenga valor
-    await expect(page.locator('//div[@tabindex="0"]').nth(2))
-    .toHaveAttribute('tabindex', '0');
+    await expect(page.getByTestId('TextInputEnabled').nth(1)).toHaveValue('1');
 
     //Inserta valor de password
     await page.locator ('//input[@type=\'password\']').fill(Pass);
 
     // Valida que el pass tenga valor
-    await expect(page.locator('//div[@tabindex="0"]').nth(3))
-    .toHaveAttribute('tabindex', '0');
+    await expect(page.locator ('//input[@type=\'password\']')).toHaveValue(Pass);
 
     //valida que el boton este habilitado
     const locator = page.locator(`//div[contains(@style, "background-color: rgb(27, 56, 146)")]`).first();
@@ -147,7 +145,7 @@ test('Usuario incorrecto', async({page}, testInfo)=>{
         contentType: 'image/png'
     });
 
-    await page.pause()
+    //await page.pause()
 
 });
 
@@ -161,20 +159,16 @@ test('Pass incorrecto', async({page}, testInfo)=>{
     await page.getByTestId('TextInputEnabled').nth(1).fill(User);
 
     //Valida que el usuario tenga valor
-    await expect(page.locator('//div[@tabindex="0"]').nth(2))
-    .toHaveAttribute('tabindex', '0');
+    await expect(page.getByTestId('TextInputEnabled').nth(1)).toHaveValue(User);
 
     //Inserta valor incorecto al password
     await page.locator ('//input[@type=\'password\']').fill('9999');
 
+    //Valida que el pass tenga valor
+    await expect (page.locator ('//input[@type=\'password\']')).toHaveValue('9999');
+
     //Clic en visualizar pass
     await page.getByTestId('EyeIcon').click();
-
-    await page.waitForTimeout(1000);
-
-    //Valida que el pass tenga valor
-    await expect(page.locator('//div[@tabindex="0"]').nth(3))
-    .toHaveAttribute('tabindex', '0');
 
     //Valida que el boton este habilitado
     const locator = page.locator(`//div[contains(@style, "background-color: rgb(27, 56, 146)")]`).first();
@@ -184,8 +178,7 @@ test('Pass incorrecto', async({page}, testInfo)=>{
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
     
     //Valida alerta de pass invalido
-    const alerta = page.locator('div').filter({ hasText: 'ErrorEl usuario o la contrase' }).nth(3);
-    await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
+    await expect ( page.getByText('El usuario o la contraseña')).toBeVisible();
 
     //Captura de evicencia
     await testInfo.attach('Pass incorrecto',{
@@ -193,7 +186,7 @@ test('Pass incorrecto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    // await page.pause();
+    //  await page.pause();
 
 });
 
@@ -206,20 +199,16 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
     await page.getByTestId('TextInputEnabled').nth(1).fill(User);
 
     //Valida que el usuario tenga valor
-    await expect(page.locator('//div[@tabindex="0"]').nth(2))
-    .toHaveAttribute('tabindex', '0');
+    await expect(page.getByTestId('TextInputEnabled').nth(1)).toHaveValue(User)
 
     //Inserta valor de password
     await page.locator ('//input[@type=\'password\']').fill(Pass);
 
-    //Clic en visualizar pass
-    await page.getByTestId('EyeIcon').click();
-
-    await page.waitForTimeout(1000);
-
     //Valida que el pass tenga valor
-    await expect(page.locator('//div[@tabindex="0"]').nth(3))
-    .toHaveAttribute('tabindex', '0');
+    await expect(page.locator ('//input[@type=\'password\']')).toHaveValue(Pass)
+
+    //Clic en visualizar pass
+    await page.getByTestId('EyeIcon').click(); 
 
     //Valida que el boton este habilitado
     const locator = page.locator(`//div[contains(@style, "background-color: rgb(27, 56, 146)")]`).first();
