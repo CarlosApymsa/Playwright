@@ -139,8 +139,7 @@ test('Usuario incorrecto', async({page}, testInfo)=>{
     await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
     
     //Valida alerta de usuario invalido
-    const alerta = page.locator('div').filter({ hasText: 'ErrorEl usuario o la contrase' }).nth(3);
-    await expect (alerta).toContainText ('ErrorEl usuario o la contrase');
+    await expect ( page.getByText('El usuario o la contraseña')).toBeVisible();
 
     //Captura de evicencia
     await testInfo.attach('Usuario incorrecto',{
@@ -148,7 +147,7 @@ test('Usuario incorrecto', async({page}, testInfo)=>{
         contentType: 'image/png'
     });
 
-    //await page.pause()
+    await page.pause()
 
 });
 
