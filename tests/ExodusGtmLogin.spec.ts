@@ -1,5 +1,6 @@
 import {test, expect} from '@playwright/test';
 import dotenv from 'dotenv';
+import { SandboxLoginPage } from '../PageObjects/SandboxLoginPage';
 
 dotenv.config();
 
@@ -10,10 +11,11 @@ const URL = 'https://gtm-pwa.apymsa-testsvr.apymsa.com.mx/login'
 
 
 test('Ubicacion incorrecta', async({context, page}, testInfo) => {
-    
+    const LoginPage = new SandboxLoginPage(page); 
+        
     await context.grantPermissions(['geolocation']);
-
-    //Localización Lesoto//
+    
+    //Localización Lesoto
     await context.setGeolocation({
     latitude: -29.682674,
     longitude: 27.474826 // San Francisco
@@ -23,13 +25,13 @@ test('Ubicacion incorrecta', async({context, page}, testInfo) => {
     await page.goto (URL);
     
     //Inserta valor de usuario
-    await page.getByTestId('TextInputEnabled').nth(1).fill(User);
+    await LoginPage.passInput.fill(User);
 
     //Inserta valor de password
-    await page.locator ('//input[@type=\'password\']').fill(Pass);
+    await LoginPage.userInput.fill(Pass);
 
     //Clic en el boton iniciar sesión
-    await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
+    await LoginPage.Loginbotton.first().click();
 
     //Valida localizacion invalida
     const sinUbicacion = await page.getByText('No se encontró ninguna sucursal en tu localización');
@@ -42,17 +44,19 @@ test('Ubicacion incorrecta', async({context, page}, testInfo) => {
 
     });
 
-     //await page.pause()
+    //await page.pause()
 
 });
 
 test('Botón inicio sesión deshabilitado falta usuario', async({page}, testInfo)=>{
+    const LoginPage = new SandboxLoginPage (page);
+
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
     //No inserta valor de usuario
-    await page.getByTestId('TextInputEnabled').nth(1).fill('');
+    await LoginPage.userInput.fill('');
 
     //Valida que el usuario este vacío
     await expect(page.locator('//div[@tabindex="-1"]').nth(2))
@@ -63,10 +67,10 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page}, testInfo
     await expect(locator).toHaveCSS('background-color','rgb(189, 189, 189)');
 
     //Inserta valor de password
-    await page.locator ('//input[@type=\'password\']').fill(Pass);
+    await LoginPage.passInput.fill(Pass);
 
     //Clic en el boton iniciar sesión
-    await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
+    await LoginPage.Loginbotton.first().click();
 
     //Captura de evicencia
     await testInfo.attach('Botón inicio sesión deshabilitado falta usuario',{
@@ -80,15 +84,16 @@ test('Botón inicio sesión deshabilitado falta usuario', async({page}, testInfo
 });
 
 test('Botón inicio sesión deshabilitado falta pass', async({page}, testInfo)=>{
+    const LoginPage = new SandboxLoginPage(page);
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
     //Inserta valor de usuario
-    await page.getByTestId('TextInputEnabled').nth(1).fill(User);
+    await LoginPage.userInput.fill(User);
 
     //No inserta valor de password
-    await page.locator ('//input[@type=\'password\']').fill('');
+    await LoginPage.passInput.fill('');
 
     //Valida que el pass este vacío
     await expect(page.locator('//div[@tabindex="-1"]').nth(3))
@@ -100,7 +105,7 @@ test('Botón inicio sesión deshabilitado falta pass', async({page}, testInfo)=>
 
 
     //Clic en el boton iniciar sesión
-    await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
+    await LoginPage.Loginbotton.first().click();
 
     //Captura de evicencia
     await testInfo.attach('Botón inicio sesión deshabilitado falta pass',{
@@ -113,18 +118,19 @@ test('Botón inicio sesión deshabilitado falta pass', async({page}, testInfo)=>
 });
 
 test('Usuario incorrecto', async({page}, testInfo)=>{
+    const LoginPage = new SandboxLoginPage(page);
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
     //Inserta valor incorrecto al usuario
-    await page.getByTestId('TextInputEnabled').nth(1).fill('1');
+    await LoginPage.userInput.fill('1');
 
     //Valida que el usuario tenga valor
     await expect(page.getByTestId('TextInputEnabled').nth(1)).toHaveValue('1');
 
     //Inserta valor de password
-    await page.locator ('//input[@type=\'password\']').fill(Pass);
+    await LoginPage.passInput.fill(Pass);
 
     // Valida que el pass tenga valor
     await expect(page.locator ('//input[@type=\'password\']')).toHaveValue(Pass);
@@ -134,8 +140,8 @@ test('Usuario incorrecto', async({page}, testInfo)=>{
     await expect(locator).toHaveCSS('background-color','rgb(27, 56, 146)');
 
     //Clic en el boton iniciar sesión
-    await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
-    
+    await LoginPage.Loginbotton.first().click();
+
     //Valida alerta de usuario invalido
     await expect ( page.getByText('El usuario o la contraseña')).toBeVisible();
 
@@ -151,18 +157,19 @@ test('Usuario incorrecto', async({page}, testInfo)=>{
 
 
 test('Pass incorrecto', async({page}, testInfo)=>{
+    const LoginPage = new SandboxLoginPage (page);
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
     //Inserta valor de usuario
-    await page.getByTestId('TextInputEnabled').nth(1).fill(User);
+    await LoginPage.userInput.fill(User);
 
     //Valida que el usuario tenga valor
     await expect(page.getByTestId('TextInputEnabled').nth(1)).toHaveValue(User);
 
     //Inserta valor incorecto al password
-    await page.locator ('//input[@type=\'password\']').fill('9999');
+    await LoginPage.passInput.fill('9999');
 
     //Valida que el pass tenga valor
     await expect (page.locator ('//input[@type=\'password\']')).toHaveValue('9999');
@@ -175,7 +182,7 @@ test('Pass incorrecto', async({page}, testInfo)=>{
     await expect(locator).toHaveCSS('background-color','rgb(27, 56, 146)');
 
     //Clic en el boton iniciar sesión
-    await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
+    await LoginPage.Loginbotton.first().click();
     
     //Valida alerta de pass invalido
     await expect ( page.getByText('El usuario o la contraseña')).toBeVisible();
@@ -186,26 +193,27 @@ test('Pass incorrecto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    //  await page.pause();
+    //await page.pause();
 
 });
 
 test('Inicio de sesion correcto', async({page}, testInfo)=>{
+    const LoginPage = new SandboxLoginPage(page);
     
     //Dirige al usuario a la pagina principal 
     await page.goto (URL);
     
     //Inserta valor de usuario
-    await page.getByTestId('TextInputEnabled').nth(1).fill(User);
+    await LoginPage.userInput.fill(User);
 
     //Valida que el usuario tenga valor
-    await expect(page.getByTestId('TextInputEnabled').nth(1)).toHaveValue(User)
+    await expect(page.getByTestId('TextInputEnabled').nth(1)).toHaveValue(User);
 
     //Inserta valor de password
-    await page.locator ('//input[@type=\'password\']').fill(Pass);
+    await LoginPage.passInput.fill(Pass);
 
     //Valida que el pass tenga valor
-    await expect(page.locator ('//input[@type=\'password\']')).toHaveValue(Pass)
+    await expect(page.locator ('//input[@type=\'password\']')).toHaveValue(Pass);
 
     //Clic en visualizar pass
     await page.getByTestId('EyeIcon').click(); 
@@ -221,7 +229,7 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
     });
 
     //Clic en el boton iniciar sesión
-    await page.locator('div').filter({ hasText: /^Iniciar sesión$/ }).first().click();
+    await LoginPage.Loginbotton.first().click();
 
     //Valida que se recupere la pagina de inicio de sesion
     await expect(page).toHaveTitle('Inicio');
@@ -232,6 +240,7 @@ test('Inicio de sesion correcto', async({page}, testInfo)=>{
         contentType: 'image/png' 
     });
 
-    // await page.pause();
+    
+    //await page.pause();
 
 });
