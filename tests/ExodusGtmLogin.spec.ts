@@ -25,10 +25,10 @@ test('Ubicacion incorrecta', async({context, page}, testInfo) => {
     await page.goto (URL);
     
     //Inserta valor de usuario
-    await LoginPage.passInput.fill(User);
+    await LoginPage.userInput.fill(User);
 
     //Inserta valor de password
-    await LoginPage.userInput.fill(Pass);
+    await LoginPage.passInput.fill(Pass);
 
     //Clic en el boton iniciar sesión
     await LoginPage.Loginbotton.first().click();
