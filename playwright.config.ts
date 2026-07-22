@@ -39,40 +39,43 @@ geolocation: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
-    viewport: null,
+     viewport: { width: 2560,height: 1440 },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     screenshot: 'off',
+    video: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'],
+        viewport: {width: 1280,height: 670}
+       },
        
     },
     
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
-    /*{
-      name: 'Galaxy S5',
-      use: { ...devices['Galaxy S5'] },
-     },
-         {
-      name: 'iPhone SE',
-      use: { ...devices['iPhone SE'] },
-     },*/
+    // {
+    //   name: 'Galaxy S5',
+    //   use: { ...devices['Galaxy S5'] },
+    //  },
+    //      {
+    //   name: 'iPhone SE',
+    //   use: { ...devices['iPhone SE'] },
+    //  },
 
     /* Test against branded browsers. */
     // {

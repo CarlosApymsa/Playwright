@@ -4,10 +4,9 @@ import { SandboxLoginPage } from '../PageObjects/SandboxLoginPage';
 
 dotenv.config();
 
-
 const User = process.env.USER || '';
 const Pass = process.env.PASS || '';
-const URL = 'https://gtm-pwa.apymsa-testsvr.apymsa.com.mx/login'
+const URL = 'https://gtm-pwa.apymsa-testsvr.apymsa.com.mx/login';
 
 
 test('Ubicacion incorrecta', async({context, page}, testInfo) => {
