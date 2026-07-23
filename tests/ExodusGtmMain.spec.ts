@@ -68,7 +68,7 @@ test ('Tareas', async({page}, testInfo)=>{
 
 })
 
-test('Evidencias de envio', async({page}, tesInfo)=>{
+test('Evidencias de envio', async({page}, testInfo)=>{
     const LoginPage = new SandboxLoginPage(page);
     
     //inicio de sesion
@@ -87,10 +87,65 @@ test('Evidencias de envio', async({page}, tesInfo)=>{
 
     await page.waitForTimeout(2000)
 
-    await tesInfo.attach('Evidencias de envio', {
+    await testInfo.attach('Evidencias de envio', {
         body: await page.screenshot(),
         contentType: 'image/png'
     });
 
 
 })
+
+test('Cerrar sesión', async({page}, testInfo) =>{
+    const LoginPage = new SandboxLoginPage(page); 
+    
+    //Inicio de sesion
+    await page.goto(URL);
+    await LoginPage.userInput.fill(User);
+    await LoginPage.passInput.fill(Pass);
+    await LoginPage.Loginbotton.first().click();
+    
+    //Valida pantalla de inicio 
+    await expect(page).toHaveTitle('Inicio');
+    
+    //Clic boton de cerrar sesión
+    await page.getByTestId('TouchableCustom').click();
+
+    //Valida que se desplieegue modal
+    await expect(page.getByText('Cerrar sesión¿Deseas cerrar')).toBeVisible();
+
+    //Clic boton cancelar
+    await page.getByTestId('cancel').click();
+    
+    //Valida que se cierre modal
+    await expect(page.getByText('Cerrar sesión¿Deseas cerrar')).not.toBeVisible();
+
+    await testInfo.attach('Cancelar cierre de sesion', {
+        body: await page.screenshot(),
+        contentType: 'image/png'
+    });
+    
+
+
+    //Clic boton de cerrar sesión
+    await page.getByTestId('TouchableCustom').click();
+
+    //Valida que se desplieegue modal
+    await expect(page.getByText('Cerrar sesión¿Deseas cerrar')).toBeVisible();
+
+    //Clic boton cancelar
+    await page.getByTestId('confirm').click();
+    
+    //Valida que se cierre modal
+    await expect(page).toHaveTitle('Login');
+
+    await page.waitForTimeout(5000);
+    
+    await testInfo.attach('Cierre de sesion', {
+        body: await page.screenshot(),
+        contentType: 'image/png'
+    });
+
+
+    // await page.pause();
+
+});

@@ -12,21 +12,33 @@ const URL = 'https://gtm-pwa.apymsa-testsvr.apymsa.com.mx/login';
 test ('Recueperar tarea asignada', async ({page}, testInf) =>{
     const LoginPage = new SandboxLoginPage(page);
     
+    const responsePromise = page.waitForResponse(response => 
+        response.url().includes('/gt/v1/generalTask/api/v1/task/unassigned?branchOfficeId=25&employeeId=1931&roleId=1') && response.status() === 200
+    );
+   
     //Inicio de sesion
     await page.goto(URL);
+
     await LoginPage.userInput.fill(User);
     await LoginPage.passInput.fill(Pass);
     await LoginPage.Loginbotton.first().click();
+
+    
     
     //Valida pantalla Inicio
     await expect(page).toHaveTitle('Inicio');
 
-    const responsePromise = page.waitForResponse(response => 
-        response.url().includes('/login') &&
-        response.status() === 200
-    );    
+    page.on('response', response => {
+    console.log(
+        response.status(),
+        response.url()
+    );
+});
 
-    await page.getByTestId('MainItem').nth(1).click
+    await page.getByTestId('MenuItem').nth(1).click();
+
+
+    
 
     const response = await responsePromise;
     const body = await response.json();
@@ -39,7 +51,10 @@ test ('Recueperar tarea asignada', async ({page}, testInf) =>{
 
     //     expect(Object.values(TaskList)).toContain(taskName);
 
+    await page.pause();
 
 
 
-})
+
+});
+
